@@ -25,7 +25,7 @@ grouped_ids=grouped_ids[~is_headings].reset_index(drop=True)
 print(grouped_ids)
 sub_keys['section'] = grouped_ids.map(lambda x: heading_names[x-1] if x <= len(heading_names) else np.nan)
 print(sub_keys)
-sub_keys['combined_key'] = sub_keys['section'] + "_" + sub_keys.iloc[:, 0]
+sub_keys['combined_key'] =  sub_keys.iloc[:, 0] + "_" + sub_keys['section'] 
 
 
 result = dict(zip(sub_keys['combined_key'], sub_keys.iloc[:, 1]))
