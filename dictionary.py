@@ -30,7 +30,6 @@ sub_keys['combined_key'] = sub_keys['section'] + "_" + sub_keys.iloc[:, 0]
 
 result = dict(zip(sub_keys['combined_key'], sub_keys.iloc[:, 1]))
 
-
 print(json.dumps(result, indent=4))
 
 search_item="Net sales"
