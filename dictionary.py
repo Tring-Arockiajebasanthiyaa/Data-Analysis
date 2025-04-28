@@ -2,8 +2,11 @@ import pandas as pd
 import numpy as np
 from tabulate import tabulate
 import json
-df = pd.read_excel("Financial_Report Apple.xlsx",sheet_name="CONDENSED CONSOLIDATED STATEMEN",engine="openpyxl")
-df1 = pd.read_excel("Financial_Report (17).xlsx",sheet_name="CONDENSED CONSOLIDATED STATEMEN",engine='openpyxl')
+
+file_dir1='ExcelSheets\Financial_Report (17).xlsx'
+file_dir='ExcelSheets\Financial_Report Apple.xlsx'
+df = pd.read_excel(file_dir,sheet_name="CONDENSED CONSOLIDATED STATEMEN",engine="openpyxl")
+df1 = pd.read_excel(file_dir1,sheet_name="CONDENSED CONSOLIDATED STATEMEN",engine='openpyxl')
 
 # Q2
 print(tabulate(df,headers='keys',tablefmt='grid'))
@@ -31,6 +34,7 @@ sub_keys['combined_key'] =  sub_keys.iloc[:, 0] + "_" + sub_keys['section']
 
 result = dict(zip(sub_keys['combined_key'], sub_keys.iloc[:, 1]))
 
+#q3
 print(tabulate(df1,headers='keys',tablefmt='grid'))
 new_row=pd.DataFrame([['summary'] + [np.nan]*(df1.shape[1]-1)] , columns=df1.columns)
 df1 = pd.concat([new_row,df1.iloc[1:]]).reset_index(drop=True)
@@ -54,11 +58,6 @@ print(json.dumps(result1 , indent=4))
 
 search_item=90753
 
-# for key , value in result1.items():
-#     if value == search_item:
-#         print(f"{key}")
-#         if key in result:
-#             print(result.get(key))
 
 d1={v:k for k , v in result1.items()}
 print(d1.get(90753))
