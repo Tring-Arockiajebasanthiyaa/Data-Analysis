@@ -103,6 +103,15 @@ def searchFileInDropbox(filename, entry):
         return True
     return False
 
+def createFolderIfNotExists(folderName):
+    try:
+        dbx.files_get_metadata(folderName)
+        print("Folder present")
+    except ApiError as e:
+        if isinstance(e.error, dropbox.files.GetMetadataError) and e.error.is_path() and e.error.get_path().is_not_found():
+            dbx.files_create_folder_v2(folderName)
+    else:
+        raise
 if __name__ == '__main__':
     open_authorization_url()
     auth_code = input("\nAfter authorizing, paste the code you received here: ").strip()
@@ -123,7 +132,10 @@ if __name__ == '__main__':
         checkFileDetails()
     except Error as err:
         sys.exit("Error while checking file details")
-
+    folderName=input("Enter the folder name:")
+    if not folderName.startswith('/'):
+        folderName = '/' + folderName
+    createFolderIfNotExists(folderName)
     print("Creating backup...")
     backup()
     print("File Uploaded")
