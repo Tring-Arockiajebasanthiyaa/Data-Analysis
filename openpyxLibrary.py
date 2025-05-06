@@ -1,11 +1,13 @@
+import re
 import openpyxl
 import json
 import numpy as np
 
 from openpyxl.styles import Alignment
+from openpyxl.utils import get_column_letter
 
 
-path='C:\PyTask\ExcelSheets\Apple-model-dummy.xlsx'
+path = 'C:/PyTask/ExcelSheets/Apple-model-dummy (1).xlsx'
 path1='C:\PyTask\ExcelSheets\Financial_Report (17).xlsx'
 path2='C:\PyTask\ExcelSheets\Financial_Report Apple.xlsx'
 
@@ -85,26 +87,58 @@ dict4={v:k for k , v in dict1.items()}
 
 #create new Excel
 
-workbook=openpyxl.Workbook()
-new_sheet=workbook.create_sheet("Sheet2")
-workbook.save("Altered_excel.xlsx")
+# workbook=openpyxl.Workbook()
+# new_sheet=workbook.create_sheet("Sheet2")
+# workbook.save("Altered_excel.xlsx")
 
 #create new column
-new_col = ws.max_column + 1
-for row in ws.iter_rows(min_row=9 , max_row=81):
-    search_row=row[1]
-    val=search_row.value
-    print(search_row.value)
+# new_col = ws.max_column + 1
+
+# for row in ws.iter_rows(min_row=9 , max_row=81):
+#     search_row=row[1]
+#     val=search_row.value
+#     print(search_row.value)
     
-    if val not in ('', 'NA', None , 0 , 'REP' ,'-'):
+#     if val not in ('', 'NA', None , 0 , 'REP' ,'-'):
+#         q2_key = dict4.get(val)
+#         q3_value = dict2.get(q2_key)
+#         ws.cell(row=search_row.row, column=new_col).value = q3_value
+        
+# ws.cell(row=5 , column=3).value="Updated Values from Q3"     
+# ws.cell(row=5, column=3).alignment = Alignment(wrap_text=True)
+new_col = ws.max_column + 1
+new_col_letter = get_column_letter(new_col)
+
+# Add header
+ws.cell(row=5, column=new_col).value = "Updated Values from Q3"
+ws.cell(row=5, column=new_col).alignment = Alignment(wrap_text=True)
+
+
+pattern = re.compile(r'(?<![A-Z])\$?B\$?(\d+)', re.IGNORECASE)
+
+
+for row in ws.iter_rows(min_row=9, max_row=81):
+    search_cell = row[1]  
+    val = search_cell.value
+    row_idx = search_cell.row
+    target_cell = ws.cell(row=row_idx, column=new_col)
+
+    
+    if isinstance(val, str) and val.startswith('='):
+        new_formula = pattern.sub(lambda m: f'{new_col_letter}{m.group(1)}', val)
+        target_cell.value = new_formula
+
+    
+    elif val not in ('', 'NA', None, 0, 'REP', '-'):
         q2_key = dict4.get(val)
         q3_value = dict2.get(q2_key)
-        ws.cell(row=search_row.row, column=new_col).value = q3_value
-        
-ws.cell(row=5 , column=3).value="Updated Values from Q3"     
-ws.cell(row=5, column=3).alignment = Alignment(wrap_text=True)
+        target_cell.value = q3_value
+
 wb.save(path)
 
 for i in range(9,ws.max_row+1):
-    col3_value=ws.cell(row=i,column=3).value
+    col3_value=ws.cell(row=i,column=new_col).value
     print(col3_value)
+
+
+
