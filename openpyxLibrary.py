@@ -11,7 +11,8 @@ path = 'C:/PyTask/ExcelSheets/Apple-model-dummy (1).xlsx'
 path1='C:\PyTask\ExcelSheets\Financial_Report (17).xlsx'
 path2='C:\PyTask\ExcelSheets\Financial_Report Apple.xlsx'
 
-wb=openpyxl.load_workbook(path , data_only=True)
+wb = openpyxl.load_workbook(path , data_only=False)
+
 wb1=openpyxl.load_workbook(path1,data_only=True)
 wb2=openpyxl.load_workbook(path2,data_only=True)
 
@@ -91,21 +92,7 @@ dict4={v:k for k , v in dict1.items()}
 # new_sheet=workbook.create_sheet("Sheet2")
 # workbook.save("Altered_excel.xlsx")
 
-#create new column
-# new_col = ws.max_column + 1
 
-# for row in ws.iter_rows(min_row=9 , max_row=81):
-#     search_row=row[1]
-#     val=search_row.value
-#     print(search_row.value)
-    
-#     if val not in ('', 'NA', None , 0 , 'REP' ,'-'):
-#         q2_key = dict4.get(val)
-#         q3_value = dict2.get(q2_key)
-#         ws.cell(row=search_row.row, column=new_col).value = q3_value
-        
-# ws.cell(row=5 , column=3).value="Updated Values from Q3"     
-# ws.cell(row=5, column=3).alignment = Alignment(wrap_text=True)
 new_col = ws.max_column + 1
 new_col_letter = get_column_letter(new_col)
 
